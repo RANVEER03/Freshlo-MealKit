@@ -8,4 +8,4 @@ Course/Section: WEB322/ZAA
 
 ## Project URLs
 GitHub Repository: https://github.com/RANVEER03/WEB322-ASSIGNMENT/ 
-Heroku URL: https://<app_name>.herokuapp.com/
+Heroku URL: https://freshlo-web322.herokuapp.com/
