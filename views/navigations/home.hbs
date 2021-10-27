@@ -1,0 +1,46 @@
+{{>hero}}
+<main>
+    <section class=content>
+            <h2 class=contentTitle>HOW IT WORKS</h2>
+             <a class="contentBtn" href="/views/button.html" >Watch a Tutorial</a>
+            <div class=contentItems>
+                <div class=contentItem class="col-4">
+                  <img src="/pics/originalRecipie.jpg" width="200">
+                    <h3>We have original recipes</h3>
+                    <p>We use premium products and ingredients to get a match of restaurant recipes and flavour with healthy benefits.</p>       
+                </div>
+                <div class=contentItem class="col-4">
+                    <img src="/pics/preference.jpg" width="200" >
+                    <h3>Choose preference</h3>
+                    <p>You can choose your own food kit according to your taste, diet with new stock of kits updated every week.</p>
+                </div>
+                <div class=contentItem class="col-4">
+                    <img src="/pics/delivery.jpg" width="200">
+                    <h3>Free delivery twice a week</h3>
+                    <p>Your items and kit are guaranteed to be deliver in one day and we always try to deliver fresh and healthy food items. </p>
+                </div>
+                <div class=contentItem class="col-4">
+                    <img src="/pics/discount.jpg" width="200">
+                    <h3>
+                     Offers and meals 
+                    </h3>
+                    <p>We update your profile and set to show you list of meals that are favorite to you by analyzing the order you made previously and give offers and discounted rates if you make more then one order from our application. </p>
+                </div>
+            </div>
+    </section>
+    <section class="topMeals">
+            {{#each kits}}
+            <div class="topMealItem">
+                 <img src= {{ImageURL}} width="200">
+                 <h4>{{Title}}</h4>
+                 <p>{{Description}}</p>
+                 <div class="price">{{Price}}</div>              
+            </div>
+            {{else}}
+            <h3>No Top-meals yet..</h3>
+            {{/each}}
+    </section>
+</main>
+    
+    
+
