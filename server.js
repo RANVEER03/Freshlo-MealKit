@@ -84,7 +84,7 @@ app.get("/signup", function(req,res){
   else{
     res.render("navigations/login",{
       validation,
-      value : req.body
+      value: req.body
     });
   };
 });
