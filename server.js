@@ -75,8 +75,6 @@ app.get("/signup", function(req,res){
     validation.password = "Please enter a valid password";
     passPass= false;
   }
-
-
    if(passPass && passEmail){
     res.render("navigations/welcome",{});
     validation = {};
