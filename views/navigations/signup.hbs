@@ -1,12 +1,25 @@
 <div class ="container">
         <h2>Sign Up</h2>
         <p>Create your account with your email address and password</p>
-        <form >
-            <input type="text" name="firstname" placeholder="First Name">
-            <input type="text" name="lastname" placeholder="Last Name">
-            <input type="text" name="emailaddress" placeholder="Email Address">
-            <input type="text" name="password" placeholder="Password">
-            <input type="button" name="signup" value="Sign Up Today">
+        <form method="post" action="signup">
+            
+            <input type="text" name="firstname" placeholder="First Name" value="{{value.firstname}}">
+            {{#if validation.firstname}}
+            <span>{{validation.firstname}}</span>
+            {{/if}}
+            <input type="text" name="lastname" placeholder="Last Name" value="{{value.lastname}}">
+            {{#if validation.lastname}}
+            <span>{{validation.lastname}}</span>
+            {{/if}}
+            <input type="text" name="emailaddress" placeholder="Email Address" value="{{value.emailaddress}}">
+            {{#if validation.emailaddress}}
+            <span>{{validation.emailaddress}}</span>
+            {{/if}}
+            <input type="text" name="password" placeholder="Password" value="{{value.password}}">
+            {{#if validation.password}}
+            <span>{{validation.password}}</span>
+            {{/if}}
+            <input type="submit" name="signup" value="Sign Up Today">
         </form>
 </div> 
 {{!-- Displayed Hero below because it hides form and user have to scroll down for it; --}}

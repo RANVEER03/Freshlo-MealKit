@@ -10,7 +10,7 @@
 *
 ************************************************************************************/
 //Establishing express
-const bodyParser = require("body-parser");
+
 var express = require("express");
 var app = express();
 
@@ -24,6 +24,7 @@ app.engine('.hbs', exphbs({
 app.set('view engine', '.hbs');
 
 //
+const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: false}));
 
 //To import exterior functions
@@ -40,26 +41,64 @@ res.status(500).send("<h1> Something Broke!<h1>")
 //Using Static folder
 app.use(express.static("static"));
 
-
 // Navigations 
 app.get("/", function(req,res){
  res.render("navigations/home",{
     kits : kitsModel.getTopMeals()
  });
 });
+
 app.get("/signup", function(req,res){
   res.render("navigations/signup");
  });
 
+app.post("/signup", function(req,res){
+  const {firstname, lastname, emailaddress, password} = req.body;
+  let validation = {};
+  let passed = true;
+  if(firstname.trim().length == 0){
+     validation.firstname ="Please enter valid firstname";
+     passed = false;   
+  };
+ if(lastname.trim().length==0){
+    validation.lastname ="Please enter valid lastname";
+    passed = false;  
+  };
+  if(emailaddress.trim().length==0){
+    validation.emailaddress ="Please enter valid emailaddress";
+    passed = false;   
+  };
+  if(password.length==0){
+    validation.password ="Please enter valid password";
+    passed = false;
+  };
+ 
+  if(passed){
+    res.render("navigations/welcome",{});
+    validation = {};
+  }
+  else{
+    res.render("navigations/signup",{
+      validation,
+      value: req.body
+    });
+  }
+  // if(password.length!=0 && emailaddress.trim().length!=0 && lastname.trim().length!=0 && firstname.trim().length != 0){
+  //   res.render("navigations/welcome",{});
+  //   validation = {};
+  // }
+});
+
  app.get("/login", function(req,res){
   res.render("navigations/login");
+
  });
 
  app.post("/login", function(req,res){
    const {emailaddress, password} = req.body;
    let validation = {};
    let passEmail,passPass = true;
-   if(typeof emailaddress == 'string' && emailaddress.length !=0){
+   if(typeof emailaddress == 'string' && emailaddress.trim().length !=0){
     passEmail= true;
      validation.emailaddress = null;
    }

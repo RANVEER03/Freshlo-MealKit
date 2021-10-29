@@ -273,11 +273,13 @@ input[type=text]{
 }
 
 input[type=submit]{
+    display: block;
     background-color: honeydew;
     color: cadetblue;
     text-align: center;
     border: 2px solid cadetblue;
-    padding : 12px 20px;
+    margin-top: 1em;
+    padding : 15px 20px;
     cursor:pointer;
     width: 100%;
 }
