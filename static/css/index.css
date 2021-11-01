@@ -33,6 +33,7 @@ section{
     top:0;
     bottom:0;
    position:inherit;
+   overflow: hidden;
 }
 
 #menulist{
@@ -156,9 +157,7 @@ main{
         margin:0 auto;
         padding-top: 4em;
     }
-    .contentItem + .contentItem{
-        padding: 0.7em;
-    }
+    
      
     .contentItem{    
        padding : auto;
@@ -177,7 +176,7 @@ main{
 
 
 .contentItems{ 
-    align-items: center;
+    align-items: flex-start;
     margin: 0 auto;
     padding-top: 4em;
     max-width: fit-content;

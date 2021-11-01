@@ -14,7 +14,11 @@
 var express = require("express");
 var app = express();
 
-
+//
+const sgmail = require("@sendgrid/mail");
+//
+const dotenv = require("dotenv");
+dotenv.config({path: "./keys/myKeys.env"});
 // Establishing Handlebars
 const exphbs = require("express-handlebars");
 app.engine('.hbs', exphbs({
@@ -23,7 +27,7 @@ app.engine('.hbs', exphbs({
 }));
 app.set('view engine', '.hbs');
 
-//
+// Establishing body parser
 const bodyParser = require("body-parser");
 app.use(bodyParser.urlencoded({extended: false}));
 
@@ -56,6 +60,19 @@ app.post("/signup", function(req,res){
   const {firstname, lastname, emailaddress, password} = req.body;
   let validation = {};
   let passed = true;
+  //regex
+  const validEmail = /[A-Za-z0-9._]{3,}@[A-Za-z]{3,}[.][A-Za-z.]{2,6}/;
+  const validPassword = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=.{8,})/;
+  
+ if(!validEmail.test(emailaddress)){
+    validation.emailaddress= "Please enter correct domain (@example.extension)";
+    passed = false;
+ };
+ if(!validPassword.test(password)){
+     validation.password = "Please enter a special character,uppercase, lowercase and 8 characters";
+     passed = false;
+ };
+
   if(firstname.trim().length == 0){
      validation.firstname ="Please enter valid firstname";
      passed = false;   
@@ -72,10 +89,28 @@ app.post("/signup", function(req,res){
     validation.password ="Please enter valid password";
     passed = false;
   };
- 
+  
   if(passed){
-    res.render("navigations/welcome",{});
     validation = {};
+    sgmail.setApiKey(process.env.mailKey);
+    const mailMsg = {
+      To : `${emailaddress}`,
+      From : 'rssaini8@myseneca.ca',
+      Subject : 'Welcome (freshlo)',
+      html : `Your Full Name : ${firstname} ${lastname} <br>
+              Your Email Address: ${emailaddress} <br>
+              Your password: ${password}<br>`
+    };
+    sgmail.send(mailMsg).then(()=>{
+      res.render("navigations/welcome",{
+        msg: "Mail sent successfully"
+      });
+    }).catch(err =>{
+      res.render("navigations/signup",{
+        validation,
+        value: req.body
+      });
+    });
   }
   else{
     res.render("navigations/signup",{
@@ -83,15 +118,10 @@ app.post("/signup", function(req,res){
       value: req.body
     });
   }
-  // if(password.length!=0 && emailaddress.trim().length!=0 && lastname.trim().length!=0 && firstname.trim().length != 0){
-  //   res.render("navigations/welcome",{});
-  //   validation = {};
-  // }
 });
 
  app.get("/login", function(req,res){
   res.render("navigations/login");
-
  });
 
  app.post("/login", function(req,res){
