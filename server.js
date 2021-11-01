@@ -62,22 +62,21 @@ app.post("/signup", function(req,res){
   let passed = true;
   //regex
   const validEmail = /[A-Za-z0-9._]{3,}@[A-Za-z]{3,}[.][A-Za-z.]{2,6}/;
-  const validPassword = /(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&-+=()])(?=.{8,})/;
-  
+  const validPassNum = /(?=.*[0-9])/ ;
+  const validPassSmall = /(?=.*[a-z])/;
+  const validPassLarge =  /(?=.*[A-Z])/;
+  const validPassSpecial = /(?=.*[@!#$%^&-+=()])/;
+  const validPassLength = /(?=.{8,})/;
  if(!validEmail.test(emailaddress)){
     validation.emailaddress= "Please enter correct domain (@example.extension)";
     passed = false;
- };
- if(!validPassword.test(password)){
-     validation.password = "Please enter a special character,uppercase, lowercase and 8 characters";
-     passed = false;
  };
 
   if(firstname.trim().length == 0){
      validation.firstname ="Please enter valid firstname";
      passed = false;   
   };
- if(lastname.trim().length==0){
+  if(lastname.trim().length==0){
     validation.lastname ="Please enter valid lastname";
     passed = false;  
   };
@@ -86,8 +85,33 @@ app.post("/signup", function(req,res){
     passed = false;   
   };
   if(password.length==0){
-    validation.password ="Please enter valid password";
+    validation.password=[];
+    validation.password.push("Please enter valid password");
     passed = false;
+  }
+  else{
+    validation.password = [];
+    validation.password.string = "You are missing";
+    if(!validPassNum.test(password)){
+      validation.password.push(" a Number");
+      passed=false;
+    };
+    if(!validPassSmall.test(password)){
+      validation.password.push(" a small character");
+      passed=false;
+    };
+    if(!validPassLarge.test(password)){
+      validation.password.push(" a large character");
+      passed=false;
+    };
+    if(!validPassSpecial.test(password)){
+      validation.password.push(" a special character");
+      passed=false;
+    };
+    if(!validPassLength.test(password)){
+      validation.password.push(" 8 characters");
+      passed=false;
+    };
   };
   
   if(passed){
@@ -96,7 +120,7 @@ app.post("/signup", function(req,res){
     const mailMsg = {
       To : `${emailaddress}`,
       From : 'rssaini8@myseneca.ca',
-      Subject : 'Welcome (freshlo)',
+      Subject : 'Welcome (freshlo) You are registered',
       html : `Your Full Name : ${firstname} ${lastname} <br>
               Your Email Address: ${emailaddress} <br>
               Your password: ${password}<br>`

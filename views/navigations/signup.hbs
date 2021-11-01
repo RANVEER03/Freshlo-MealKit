@@ -17,7 +17,7 @@
             {{/if}}
             <input type="text" name="password" placeholder="Password" value="{{value.password}}">
             {{#if validation.password}}
-            <span>{{validation.password}}</span>
+            <span>{{validation.password.string}}{{validation.password}}</span>          
             {{/if}}
             <input type="submit" name="signup" value="Sign Up Today">
         </form>
