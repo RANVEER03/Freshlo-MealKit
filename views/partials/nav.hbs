@@ -1,13 +1,16 @@
 <header>
     <section class=nav>
      <ul id="menulist">
-        <li class="firstItem">  <span class=logo><i>Fresh</i>lo</span>
-        <img src="/pics/logo.jfif" width="20"/></li>
+        <li class="firstItem"><a href="/"> <span class=logo><i>Fresh</i>lo</span></a> 
+        <a href="/"><img src="/pics/logo.jfif" width="20"/></a></li>
            
-        <li> <a class="menuItems" href="onthemenu" >On The Menu</a></li>
-        <li> <a class="menuItems" id="btnSignUp" href="signup" >Sign up</a></li>
-        <li> <a class="menuItems" class=btnLogin href="login" >Login</a></li>
-        <li> <a class="menuItems" href="/">Home</a>
+        <li> <a class="menuItems" href="/onthemenu" >On The Menu</a></li>
+        {{#if user}}
+           <li> <a class="menuItems" href="/logout">logout</a></li>
+        {{else}}
+        <li> <a class="menuItems" id="btnSignUp" href="/signup" >Sign up</a></li>
+        <li> <a class="menuItems" class="btnLogin" href="/login" >Login</a></li>
+        {{/if}}
         </ul>            
     </section>
 </header>

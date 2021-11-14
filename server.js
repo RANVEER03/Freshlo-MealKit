@@ -14,6 +14,10 @@
 var express = require("express");
 var app = express();
 
+//Establishing Dotenv
+const dotenv = require("dotenv");
+dotenv.config({path: "./keys/myKeys.env"});
+
 // Establishing Handlebars
 const exphbs = require("express-handlebars");
 app.engine('.hbs', exphbs({
@@ -22,13 +26,35 @@ app.engine('.hbs', exphbs({
 }));
 app.set('view engine', '.hbs');
 
-//Establishing Dotenv
-const dotenv = require("dotenv");
-dotenv.config({path: "./keys/myKeys.env"});
+//Establishing express-sessions
+const session = require("express-session");
+app.use(session({
+  secret: process.env.SECRET_STRING,
+  resave: false,
+  saveUninitialized: true
+}));
+app.use((req, res, next) => {
+  // res.locals.user is a global handlebars variable.
+  // This means that every single handlebars file can access this variable.
+  res.locals.user = req.session.user;
+  next();
+});
 
 // Establishing body parser
-const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(express.urlencoded({extended: false}));
+
+// Establishing mongoose
+const mongoose = require('mongoose');
+mongoose.connect(process.env.CONNECTION_STRING, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+})
+.then(() => {
+  console.log("Connected to the MongoDB database.");
+})
+.catch((err) => {
+  console.log(`Cannot connect because of the error....${err}`);
+});
 
 //Using Static folder
 app.use(express.static("static"));
@@ -41,6 +67,8 @@ const navigation = require("./controllers/navigation");
  app.use("/onthemenu",navigation);
  app.use("/signup",navigation);
  app.use("/login",navigation);
+ app.use("/dashboard/customer",navigation);
+ app.use("/logout",navigation);
 
 // Port Listening
 var HTTP_PORT = process.env.PORT || 8080;

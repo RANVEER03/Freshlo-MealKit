@@ -15,10 +15,15 @@
             {{#if validation.emailaddress}}
             <span>{{validation.emailaddress}}</span>
             {{/if}}
+            {{#if mailValid}}
+            <span>{{mailValid}}</span>
+            {{/if}}
             <input type="text" name="password" placeholder="Password" value="{{value.password}}">
             {{#if validation.password}}
             <span>{{validation.password.string}}{{validation.password}}</span>          
             {{/if}}
+            <input type="file" name="profilepicture" placeholder="Add file" value="{{value.profilepicture}}">
+            
             <input type="submit" name="signup" value="Sign Up Today">
         </form>
 </div> 

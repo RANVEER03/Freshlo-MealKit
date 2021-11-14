@@ -48,6 +48,7 @@ section{
 }
 
 li{
+    display:flex;
     list-style: none;  
 }
 
@@ -270,6 +271,14 @@ input[type=text]{
     margin-bottom: 12px;
     resize:vertical;
 }
+input[type=file]{
+    width:100%;
+    box-sizing: border-box;
+    padding:12px 0;
+    color: cadetblue;
+    font-size:medium;
+    margin:2px 0;
+}
 
 input[type=submit]{
     display: block;
@@ -377,4 +386,12 @@ th, td{
     height: 20vw;
     width: 100%;
    object-fit: cover;
+}
+
+label{
+    display:inline-block;
+    color: cadetblue;
+    text-align: inherit;
+    padding:0 auto;
+    margin:5px;
 }
