@@ -43,6 +43,10 @@ app.use((req, res, next) => {
 // Establishing body parser
 app.use(express.urlencoded({extended: false}));
 
+//Establishing file upload
+const fileUpload = require("express-fileupload");
+app.use(fileUpload());
+
 // Establishing mongoose
 const mongoose = require('mongoose');
 mongoose.connect(process.env.CONNECTION_STRING, {

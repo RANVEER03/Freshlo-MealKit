@@ -9,10 +9,13 @@
             {{#if validation.password}}
             <span>{{validation.password}}</span>
             {{/if}}
-            <br><input type="checkbox" name="clerk" value="clerk">
+            <br><input type="checkbox" name="clerk" {{#if value.clerk}} checked="true" {{/if}}>
             <label for="clerk">LOG IN as clerk</label><br>
-            <input type="checkbox" name="customer" value="customer">
-            <label for="customer">LOG IN as customer</label>
+            <input type="checkbox" name="customer" {{#if value.customer}} checked="true" {{/if}}>
+            <label for="customer">LOG IN as customer</label><br>
+            {{#if validation.checkbox}}
+            <span>{{validation.checkbox}}</span>
+            {{/if}}
             <input type="submit" name="login" value="Log In">
         </form>
 </div>

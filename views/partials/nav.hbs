@@ -4,10 +4,12 @@
         <li class="firstItem"><a href="/"> <span class=logo><i>Fresh</i>lo</span></a> 
         <a href="/"><img src="/pics/logo.jfif" width="20"/></a></li>
            
-        <li> <a class="menuItems" href="/onthemenu" >On The Menu</a></li>
+        
         {{#if user}}
-           <li> <a class="menuItems" href="/logout">logout</a></li>
+           <li> <a class="menuItems" href="/onthemenu" >My Menu</a></li>
+           <li> <a class="menuItems" href="/logout">Logout</a></li>
         {{else}}
+        <li> <a class="menuItems" href="/onthemenu" >On The Menu</a></li>
         <li> <a class="menuItems" id="btnSignUp" href="/signup" >Sign up</a></li>
         <li> <a class="menuItems" class="btnLogin" href="/login" >Login</a></li>
         {{/if}}

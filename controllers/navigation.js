@@ -1,7 +1,10 @@
 const express = require('express');
 const router = express.Router();
-const bcrypt = require("bcryptjs")
-const session = require("express-session")
+const bcrypt = require("bcryptjs");
+const session = require("express-session");
+const path =  require("path");
+let isCustomer, isClerk = false;
+
 //To import exterior functions
 const kitsModel = require("../models/node");
 
@@ -23,14 +26,6 @@ router.get("/onthemenu", function(req,res){
     res.render("navigations/onthemenu",{
       kits : kitsModel.getCategoryKits()
     });
-});
-
-//dashboard
-router.get("/dashboard/customer", function(req,res){
-  if(req.session.user)
-   res.render("user/customer");
-  else
-   res.redirect("/login");
 });
 
 //Signup
@@ -68,6 +63,7 @@ router.post("/signup", function(req,res){
       passed = false;
     };
    }
+   
    if(password.length==0){
      validation.password=[];
      validation.password.push("Please enter valid password");
@@ -95,9 +91,11 @@ router.post("/signup", function(req,res){
      if(!validPassLength.test(password)){
        validation.password.push(" 8 characters");
        passed=false;
+
      };
    };
-   
+   let extension = path.parse(req.files.profilePicture.name).ext;
+
    if(passed){
     validation = {};
     sgmail.setApiKey(process.env.mailKey);
@@ -118,10 +116,13 @@ router.post("/signup", function(req,res){
       emailAddress: emailaddress,
       password: password
     });
+    //let fileName = `profile-pic-${userDB._id}${path.parse(req.files.profilePicture.name).ext}`;
+    //console.log(userDB._id);
     userDB.save()
     .then((savedUser) => {
         // User was saved correctly.
         console.log(`User ${savedUser.firstName} has been added to the database.`);
+       
         sgmail.send(mailMsg).then(()=>{
           res.render("navigations/welcome",{
             value: req.body,
@@ -135,7 +136,19 @@ router.post("/signup", function(req,res){
         });
     })
     .catch((err) => {
-        console.log(`Error adding user to the database ... ${err}`);
+      userModel.findOne({
+        emailAddress: emailaddress  
+       })
+       .then(user=>{
+          if(user){
+            validation.emailaddress= "Email already exists, Please try different..";
+            res.render("navigations/signup",{
+              validation,
+              value: req.body
+            });
+          }
+       });
+       console.log(`Error adding user to the database ... ${err}`);
     });
   }
    else{
@@ -145,32 +158,42 @@ router.post("/signup", function(req,res){
      });
    }
  });
+
 //Login
   router.get("/login", function(req,res){
     res.render("navigations/login");
    });
 
    router.post("/login", function(req,res){
-    const {emailaddress, password} = req.body;
+    const {emailaddress, password, clerk, customer} = req.body;
     let validation = {};
     let passEmail,passPass = true;
+    let passed = false;
     if(typeof emailaddress == 'string' && emailaddress.trim().length !=0){
-     passEmail= true;
+      passed= true;
       validation.emailaddress = null;
     }
     else{
       validation.emailaddress ="Please enter a valid email address";
-      passEmail= false;
+      passed= false;
     }
     if(typeof password == 'string' && password.length !=0){
-     passPass= true;
+     passed= true;
      validation.password = null;
    }
    else{
      validation.password = "Please enter a valid password";
-     passPass= false;
+     passed= false;
    }
-    if(passPass && passEmail){     
+   if(!(clerk||customer)){
+       validation.checkbox="Please select at least one";
+       passed= false;
+   }
+   else if(clerk && customer){
+    validation.checkbox="You cannot be both";
+    passed= false;
+   }
+    if(passed){     
      validation = {};
      userModel.findOne({
       emailAddress: emailaddress  
@@ -184,12 +207,20 @@ router.post("/signup", function(req,res){
           .then(isMatched => {
               // Done comparing the passwords.
   
-              if (isMatched) {
+              if (isMatched && customer) {
                   // Passwords match.
                   // Create a new session and store the user document (object)
                   // to the session.
+                  isCustomer= true;
+                  isClerk = false;
                   req.session.user = user;
                   res.redirect("/dashboard/customer");
+              }
+              else if (isMatched && clerk){
+                isClerk= true;
+                isCustomer= false;
+                req.session.user = user;
+                res.redirect("/dashboard/clerk");
               }
               else {
                   // Passwords to not match.
@@ -239,6 +270,21 @@ router.post("/signup", function(req,res){
    };
 });
 
+//dashboard
+router.get("/dashboard/customer", function(req,res){
+  if(req.session.user && isCustomer)
+   res.render("user/customer");
+  else
+   res.redirect("/login");
+});
+router.get("/dashboard/clerk", function(req,res){
+  if(req.session.user && isClerk)
+   res.render("user/clerk");
+  else
+   res.redirect("/login");
+});
+
+//logout
 router.get("/logout", (req, res) => {
   // Clear the session from memory.
   req.session.destroy();

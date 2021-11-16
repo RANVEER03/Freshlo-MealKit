@@ -25,6 +25,9 @@ const userSchema = new schema({
     dateCreated: {
         type: Date,
         default: Date.now()
+    },
+    profilePicture:{
+        type: String
     }
 });
 
