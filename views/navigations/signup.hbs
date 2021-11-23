@@ -22,8 +22,10 @@
             {{#if validation.password}}
             <span>{{validation.password.string}}{{validation.password}}</span>          
             {{/if}}
-            <input type="file" name="profilePicture" id="profilePicture" placeholder="Add file" value="{{value.profilePicture}}">
-            
+            <input type="file" name="profilePicture" id="profilePicture" placeholder="Add file">
+            {{#if validation.profilePicture}}
+            <span>{{validation.profilePicture}}</span>          
+            {{/if}}
             <input type="submit" name="signup" value="Sign Up Today">
         </form>
 </div> 

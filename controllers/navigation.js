@@ -3,7 +3,6 @@ const router = express.Router();
 const bcrypt = require("bcryptjs");
 const session = require("express-session");
 const path =  require("path");
-let isCustomer, isClerk = false;
 
 //To import exterior functions
 const kitsModel = require("../models/node");
@@ -30,14 +29,15 @@ router.get("/onthemenu", function(req,res){
 
 //Signup
 router.get("/signup",function(req,res){
+  if(!res.locals.user)
   res.render("navigations/signup");
+  else res.redirect("/");
 });
 
 router.post("/signup", function(req,res){
    const {firstname, lastname, emailaddress, password} = req.body;
    let validation = {};
    let passed = true;
-   
    //regex
    const validEmail = /[A-Za-z0-9._]{3,}@[A-Za-z]{3,}[.][A-Za-z.]{2,6}/;
    const validPassNum = /(?=.*[0-9])/ ;
@@ -91,11 +91,16 @@ router.post("/signup", function(req,res){
      if(!validPassLength.test(password)){
        validation.password.push(" 8 characters");
        passed=false;
-
      };
    };
-   let extension = path.parse(req.files.profilePicture.name).ext;
-
+   if(req.files){
+    let extension = path.parse(req.files.profilePicture.name).ext;
+    if(extension != '.jpg'){
+       validation.profilePicture="Please use .jpg, .jpeg, .png and extensions which support pictures"
+       passed=false;
+      }
+   }
+   
    if(passed){
     validation = {};
     sgmail.setApiKey(process.env.mailKey);
@@ -161,13 +166,15 @@ router.post("/signup", function(req,res){
 
 //Login
   router.get("/login", function(req,res){
+    if(!res.locals.user)
     res.render("navigations/login");
+    else res.redirect("/");
    });
 
    router.post("/login", function(req,res){
     const {emailaddress, password, clerk, customer} = req.body;
     let validation = {};
-    let passEmail,passPass = true;
+ 
     let passed = false;
     if(typeof emailaddress == 'string' && emailaddress.trim().length !=0){
       passed= true;
@@ -211,15 +218,13 @@ router.post("/signup", function(req,res){
                   // Passwords match.
                   // Create a new session and store the user document (object)
                   // to the session.
-                  isCustomer= true;
-                  isClerk = false;
-                  req.session.user = user;
+                 
+                  req.session.customeruser = user;
                   res.redirect("/dashboard/customer");
               }
               else if (isMatched && clerk){
-                isClerk= true;
-                isCustomer= false;
-                req.session.user = user;
+               
+                req.session.clerkuser = user;
                 res.redirect("/dashboard/clerk");
               }
               else {
@@ -268,27 +273,6 @@ router.post("/signup", function(req,res){
        value: req.body
      });
    };
-});
-
-//dashboard
-router.get("/dashboard/customer", function(req,res){
-  if(req.session.user && isCustomer)
-   res.render("user/customer");
-  else
-   res.redirect("/login");
-});
-router.get("/dashboard/clerk", function(req,res){
-  if(req.session.user && isClerk)
-   res.render("user/clerk");
-  else
-   res.redirect("/login");
-});
-
-//logout
-router.get("/logout", (req, res) => {
-  // Clear the session from memory.
-  req.session.destroy();
-  res.redirect("/login");
 });
 
  //Exporting router
