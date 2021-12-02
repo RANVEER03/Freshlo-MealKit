@@ -1,0 +1,33 @@
+
+{{#if msg}}
+ <h2 style="text-align: center; color:cadetblue; font-size:large; display:block ; padding-bottom: 10px">{{msg}}</h2>
+{{/if}}
+ {{#if clerkuser}}
+<div class ="container">
+        <h2></h2>
+        <p>Fill out information</p>
+        <form method="post" action="meal-kits" enctype="multipart/form-data">
+            <label>Category type?</label><br>
+            <input type="checkbox" name="classic"> <label>Classic meals</label><br>
+            <input type="checkbox" name="featured"> <label>Featured meals</label><br>  
+            <input type="text" name="newcategory" placeholder="Add new category" value="{{value.firstname}}">  
+            <input type="text" name="title" placeholder="Title" value="{{value.firstname}}">
+            {{#if validation.firstname}}
+            <span>{{validation.firstname}}</span>
+            {{/if}}
+            <input type="text" name="description" placeholder="Description" value="{{value.lastname}}">
+            <input type="text" name="cookingtime" placeholder="Cooking Time" value="{{value.password}}">
+            <input type="text" name="calories" placeholder="Calories" value="{{value.password}}">
+            <input type="text" name="price" placeholder="Price" value="{{value.password}}">
+            <label>Is this a top meal</label>
+            <input type="checkbox" name="truetopmeal"> <label>Yes</label>
+            <input type="checkbox" name="falsetopmeal"> <label>No</label><br><br> 
+            <label>Add pic for your meal-kit</label>
+            <input type="file" name="profilePicture" id="profilePicture" placeholder="Add file">
+            {{#if validation.profilePicture}}
+            <span>{{validation.profilePicture}}</span>          
+            {{/if}}
+            <input type="submit" name="add-data" value="Add Data">
+        </form>
+</div> 
+{{/if}}

@@ -6,8 +6,13 @@
            
         
         {{#if user}}
+           {{#if clerkuser}}
+              <li> <a class="menuItems" href="/load-data/meal-kits" >AddData</a></li>
+              <li> <a class="menuItems" href="/dashboard/clerk">Dashboard</a></li>
+           {{else}}
+           <li> <a class="menuItems" href="/dashboard/customer">Dashboard</a></li>
+           {{/if}}
            <li> <a class="menuItems" href="/onthemenu" >My Menu</a></li>
-           <li> <a class="menuItems" href="/dashboard">Dashboard</a></li>
            <li> <a class="menuItems" href="/logout">Logout</a></li>          
         {{else}}
         <li> <a class="menuItems" href="/onthemenu" >On The Menu</a></li>

@@ -36,9 +36,13 @@ app.use(session({
 app.use((req, res, next) => {
   // res.locals.user is a global handlebars variable.
   // This means that every single handlebars file can access this variable.
-  if(req.session.customeruser)
-  res.locals.user = req.session.customeruser;
-  else res.locals.user =  req.session.clerkuser;
+  if(req.session.customeruser){
+  res.locals.customeruser = req.session.customeruser;
+  res.locals.user =  req.session.customeruser;
+  }
+  else {res.locals.clerkuser =  req.session.clerkuser;
+  res.locals.user =  req.session.clerkuser
+  };
   next();
 });
 
@@ -68,6 +72,7 @@ app.use(express.static("static"));
 //configuring my controllers
 const navigation = require("./controllers/navigation");
 const user = require("./controllers/user");
+const loadData = require("./controllers/load-data")
 // All Navigation
  app.use("/",navigation);
  app.use("/onthemenu",navigation);
@@ -78,7 +83,9 @@ const user = require("./controllers/user");
 //  app.use("/logout",navigation);
 // All user
 app.use("/dashboard",user);
-app.use("/",user);
+ app.use("/",user);
+// All data
+app.use("/load-data",loadData);
 // Port Listening
 var HTTP_PORT = process.env.PORT || 8080;
 
