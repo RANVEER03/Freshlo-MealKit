@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const session=require("express-session");
-
+const kitsModel =  require("../models/node");
 
 //dashboard
 router.get("/customer", function(req,res){
@@ -12,7 +11,9 @@ router.get("/customer", function(req,res){
   });
 router.get("/clerk", function(req,res){
     if(req.session.clerkuser)
-     res.render("user/clerk");
+     res.render("user/clerk",{
+        kits : kitsModel.allKits,
+     });
     else
      res.redirect("/logout");
 });

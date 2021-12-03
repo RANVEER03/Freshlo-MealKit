@@ -93,13 +93,6 @@ router.post("/signup", function(req,res){
        passed=false;
      };
    };
-   if(req.files){
-    let extension = path.parse(req.files.profilePicture.name).ext;
-    if(extension != '.jpg'){
-       validation.profilePicture="Please use .jpg, .jpeg, .png and extensions which support pictures"
-       passed=false;
-      }
-   }
    
    if(passed){
     validation = {};
