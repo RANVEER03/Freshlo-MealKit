@@ -21,9 +21,9 @@ router.post("/meal-kits", function(req,res){
     let validation={};
     let passed = true;
     let topMeal;
-    let category= [];
+    let category;
     var mealPic="";
-    
+    const {classic, featured, newcategory, title, description, cookingtime, calories, price, truetopmeal, falsetopmeal} = req.body;
     if(!(classic || featured || newcategory != 0)){
         
         passed =  false;
@@ -56,21 +56,19 @@ router.post("/meal-kits", function(req,res){
       else topMeal = false;
 
       if(classic){
-        category.push("Classic Meals");
+        category="Classic Meals";
       }
       else if (featured){
-         category.push("Featured Meals");
+         category="Featured Meals";
       }
       else {
-        category.push(newcategory);
+        category= newcategory;
       };
-
-      category.forEach(categoryName => {
       const newKit = new nodeModel.mealModel({
         Title : title,
         ingredients : "",
         Description : description,
-        Category : categoryName,
+        Category : category,
         Price : price,
         CookingTime : cookingtime,
         Calories : calories,
@@ -79,6 +77,7 @@ router.post("/meal-kits", function(req,res){
       newKit.save()
       .then((savedKit)=>{
          console.log(`Kit has been added successfully in ${savedKit.Category}`)
+         if(req.files){};
          mealPic = `meal-pic-${savedKit._id}${path.parse(req.files.mealPicture.name).ext}`;
         // Copy the image data to a file
         req.files.mealPicture.mv(`static/pics/${mealPic}`)
@@ -108,7 +107,6 @@ router.post("/meal-kits", function(req,res){
       .catch(err=>{
         console.log(`${err}`);
       });
-     });
     }
     else{
       msg="Failed to add data to database"
