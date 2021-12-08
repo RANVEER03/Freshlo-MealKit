@@ -8,13 +8,13 @@
     
     <br><h2 style="color:cadetblue; font-size:large">Update data</h2>
     {{#each kits}}
-    <div class="classicMealItems">
+    <div class="classicMealItems" style="grid-template-columns: repeat(auto-fit);">
         
         <div class="classicMealItem">
             <img src={{ImageURL}} width="200">
             <h4>{{Title}}</h4>
             <p>{{Description}}</p>
-            <button onclick=""><a style="text-align: center; color:cadetblue; font-size:large; text-decoration: none;" href="/load-data/meal-kits/{{_id}}">Update</a></button>
+            <button><a style="text-align: center; color:cadetblue; font-size:large; text-decoration: none;" href="/load-data/meal-kits/{{_id}}">Update</a></button>
         </div>
         
     </div>

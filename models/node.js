@@ -160,33 +160,45 @@ mealModel.find({})
     allKits = Kits.map(value=>value.toObject());
     module.exports.allKits = Kits.map(value=>value.toObject());
      console.log("Data rendered successfully")
+     module.exports.getCategoryKits = function(){
+        var categoryKits = [];
+        for(i=0;i < allKits.length;i++){
+            let newCategory = categoryKits.find(temp=> temp.Category == allKits[i].Category);
+            if(!newCategory){
+                newCategory = {
+                    Category : allKits[i].Category,
+                    mealKits : []
+                }
+                categoryKits.push(newCategory);
+            }
+            newCategory.mealKits.push(allKits[i]);
+         }
+       return categoryKits;
+    };
+    
+    module.exports.getTopMeals = function(){
+        var TopMeal=[];
+        for(i=0;i<allKits.length;i++){     
+             if(allKits[i].TopMeal){
+                    TopMeal.push(allKits[i]);
+             }
+        }
+        return TopMeal;
+     };
 })
 .catch(err=>{
     console.log(err);
 });
 
-module.exports.getCategoryKits = function(){
-    var categoryKits = [];
-    for(i=0;i < allKits.length;i++){
-        let newCategory = categoryKits.find(temp=> temp.Category == allKits[i].Category);
-        if(!newCategory){
-            newCategory = {
-                Category : allKits[i].Category,
-                mealKits : []
-            }
-            categoryKits.push(newCategory);
-        }
-        newCategory.mealKits.push(allKits[i]);
-     }
-   return categoryKits;
-};
-
-module.exports.getTopMeals = function(){
-    var TopMeal=[];
-    for(i=0;i<allKits.length;i++){     
-         if(allKits[i].TopMeal){
-                TopMeal.push(allKits[i]);
-         }
-    }
-    return TopMeal;
- };
+module.exports.refresh = function(){
+    mealModel.find({})
+.exec()
+.then((Kits)=>{
+    allKits = Kits.map(value=>value.toObject());
+    module.exports.allKits = Kits.map(value=>value.toObject());
+     console.log("Data Refreshed successfully");
+})
+.catch(err=>{
+    console.log(err);
+});
+}

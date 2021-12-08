@@ -114,8 +114,7 @@ router.post("/signup", function(req,res){
       emailAddress: emailaddress,
       password: password
     });
-    //let fileName = `profile-pic-${userDB._id}${path.parse(req.files.profilePicture.name).ext}`;
-    //console.log(userDB._id);
+    
     userDB.save()
     .then((savedUser) => {
         // User was saved correctly.

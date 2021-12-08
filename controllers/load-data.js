@@ -3,6 +3,7 @@ const router = express.Router();
 const session=require("express-session");
 const nodeModel = require("../models/node")
 const path = require("path")
+
 router.get("/meal-kits", function(req,res){
    let msg = "";
    if(req.session.clerkuser)
@@ -22,7 +23,7 @@ router.post("/meal-kits", function(req,res){
     let topMeal;
     let category= [];
     var mealPic="";
-    const {classic, featured, newcategory, title, description, cookingtime, calories, price, truetopmeal, falsetopmeal} = req.body;
+    
     if(!(classic || featured || newcategory != 0)){
         
         passed =  false;
@@ -90,6 +91,8 @@ router.post("/meal-kits", function(req,res){
             })
             .then(() => {
                 console.log("Meal document was updated with the picture.");
+                //Refreshing Database;
+                nodeModel.refresh();
             })
             .catch(err => {
                 console.log(`${err}`);
@@ -118,6 +121,7 @@ router.post("/meal-kits", function(req,res){
     }
  });
 
+
  router.get("/meal-kits/:kitId", function(req,res){
   let id = req.params.kitId;
   nodeModel.mealModel.findOne({_id : id})
@@ -139,6 +143,7 @@ router.post("/meal-kits", function(req,res){
     value.cookingtime = kitToUpdate.CookingTime;
     value.calories = kitToUpdate.Calories;
     value.price = kitToUpdate.Price;
+    value.pic= kitToUpdate.ImageURL;
     if(kitToUpdate.TopMeal){
       value.truetopmeal =  true;
     }
@@ -167,12 +172,13 @@ router.post("/meal-kits/:kitId", function(req,res){
   let category= [];
   let validation = {};
   let msg;
+  let mealPic;
   const {classic, featured, newcategory, title, description, cookingtime, calories, price, truetopmeal, falsetopmeal} = req.body;
   
     if(truetopmeal){
       topMeal = true;
     }
-    else {
+    else if(falsetopmeal){
       topMeal = false;
     }
   if(classic){
@@ -184,22 +190,11 @@ router.post("/meal-kits/:kitId", function(req,res){
   else {
     category=newcategory;
   };
-  let isSame = false;
+   
   nodeModel.mealModel.findOne({_id : id})
   .exec()
   .then(kitToCheck=>{
-     
-      // const newKit = new nodeModel.mealModel({
-      //   Title : title,
-      //   ingredients : "",
-      //   Description : description,
-      //   Category : categoryName,
-      //   Price : price,
-      //   CookingTime : cookingtime,
-      //   Calories : calories,
-      //   TopMeal :  topMeal
-      // });
-      let value = {}
+    let value = {};
     if(kitToCheck.Category == "Classic Meals"){
       value.classic = true;
     }
@@ -207,7 +202,7 @@ router.post("/meal-kits/:kitId", function(req,res){
        value.featured = true;
     }
     if(kitToCheck.Category != "Featured Meals" && kitToCheck.Category != "Classic Meals"){
-      value.newcategory = kitToUpdate.Category;
+      value.newcategory = kitToCheck.Category;
     }
     value.id= kitToCheck._id;
     value.title = kitToCheck.Title;
@@ -215,16 +210,20 @@ router.post("/meal-kits/:kitId", function(req,res){
     value.cookingtime = kitToCheck.CookingTime;
     value.calories = kitToCheck.Calories;
     value.price = kitToCheck.Price;
+    value.pic = kitToCheck.ImageURL;
+    mealPic = kitToCheck.ImageURL;
     if(kitToCheck.TopMeal){
       value.truetopmeal =  true;
     }
     else{
       value.falsetopmeal =  true;
     }
-        if( title== kitToCheck.Title && description == kitToCheck.Description && category == kitToCheck.Category && price == kitToCheck.Price && cookingtime == kitToCheck.CookingTime && calories == kitToCheck.Calories && topMeal == kitToCheck.TopMeal){
+    if( title== kitToCheck.Title && description == kitToCheck.Description && category == kitToCheck.Category && price == kitToCheck.Price && cookingtime == kitToCheck.CookingTime && calories == kitToCheck.Calories && topMeal == kitToCheck.TopMeal && !(req.files)){
           console.log("No changes were made to update meal kit");
+
           validation.mealPicture = "Nothing was changed so cant be updated";
           msg = "Everything is Up-to-date";
+
           res.render("data/load-data",{
             msg,    
             validation,
@@ -232,8 +231,37 @@ router.post("/meal-kits/:kitId", function(req,res){
             update: true
            });
         }
+        else if(title==0 && description==0  && category==0  && price==0 && cookingtime ==0 && calories == 0 && !topMeal){
+          nodeModel.mealModel.deleteOne({_id: id})
+          .exec()
+          .then(()=>{
+            console.log(`Deleted document with title ${kitToCheck.Title}`);
+            nodeModel.refresh();
+            res.redirect("/dashboard/clerk");
+          })
+          .catch(err=>{
+            console.log(err);
+          })
+        }
         else{
-          nodeModel.mealModel.updateOne({
+          if (truetopmeal && falsetopmeal){
+            validation.topmeal = "Please select at least one";
+            res.render("data/load-data",{
+              msg,    
+              validation,
+              value,
+              update: true
+             });
+          }
+          if(req.files){
+         mealPic = `/pics/meal-pic-${kitToCheck._id}${path.parse(req.files.mealPicture.name).ext}`;
+        // Copy the image data to a file
+        req.files.mealPicture.mv(`static/${mealPic}`)
+        .then(()=>{
+          console.log("Updating new meal picture")
+        });
+      };
+        nodeModel.mealModel.updateOne({
             _id: id
         }, {
           $set: {
@@ -244,18 +272,15 @@ router.post("/meal-kits/:kitId", function(req,res){
           Price : price,
           CookingTime : cookingtime,
           Calories : calories,
-          TopMeal :  topMeal
+          TopMeal :  topMeal,
+          ImageURL : mealPic
           }
         })
         .then(() => {
           console.log("Meal document was updated successfully.");
           msg="Updated successfully";
-          res.render("data/load-data",{
-            msg,    
-            validation,
-            value,
-            update: true
-           });
+          nodeModel.refresh();
+          res.redirect(`/load-data/meal-kits/${id}`)
          })
          .catch(err => {
           console.log(`${err}`); 

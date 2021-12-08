@@ -1,15 +1,18 @@
-
 {{#if msg}}
  <h2 style="text-align: center; color:cadetblue; font-size:large; display:block ; padding-bottom: 10px">{{msg}}</h2>
 {{/if}}
- {{#if clerkuser}}
-<div class ="container">
-        <h2></h2>
+ 
+{{#if clerkuser}}
+{{#if value.pic}}
+   <main style="background-image: url({{value.pic}}); background-size:cover; background-blend-mode:multiply; margin: 2em 15px;">
+{{/if}}
+<div class ="container" style="opacity: 0.9; z-index: -1;">
         <p>Fill out information</p>
         <form method="post" {{#if value.id}} action="{{value.id}}" {{else}}  action="meal-kits" {{/if}} enctype="multipart/form-data">
             <label>Category type?</label><br>
             <input type="checkbox" name="classic"{{#if value.classic}} checked="true" {{/if}}> <label>Classic meals</label><br>
-            <input type="checkbox" name="featured"{{#if value.featured}} checked="true" {{/if}}> <label>Featured meals</label><br>  
+            <input type="checkbox" name="featured"{{#if value.featured}} checked="true" {{/if}}> <label>Featured meals</label><br> 
+            <label>---OR---</label><br>
             <input type="text" name="newcategory" placeholder="Add it to a new category" value="{{value.newcategory}}">  
             {{#if validation.category}}
             <span>{{validation.category}}</span>
@@ -52,4 +55,7 @@
             {{/if}}
         </form>
 </div> 
+{{/if}}
+{{#if value.pic}}
+</main>
 {{/if}}
