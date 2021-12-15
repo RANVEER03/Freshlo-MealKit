@@ -1,3 +1,6 @@
+ {{#if msg}}
+    <h2 style="text-align: center; color:cadetblue; font-size:large; display:block ; padding-bottom: 10px">{{msg}}</h2>
+ {{/if}}
  {{>hero}}
  <section class="classicMeals">
      {{#each kits}}
@@ -5,7 +8,7 @@
     <div class="classicMealItems">
         {{#each mealKits}}
         <div class="classicMealItem">
-            <img src={{ImageURL}} width="200">
+            <a href="/meal-kits/detail/{{_id}}"><img src={{ImageURL}} width="200"></a>
             <h4>{{Title}}</h4>
             <p>{{Description}}</p>
         </div>

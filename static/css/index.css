@@ -395,3 +395,83 @@ label{
     padding:0 auto;
     margin:5px;
 }
+.mealDetail{
+  position: relative;
+}
+
+.mealDetail-pic{
+    position:relative;
+   display:block;
+   min-width: 100%;
+   height: 50VW;
+   margin: auto;
+   width: auto;
+   object-fit: cover;
+}
+
+.shortData{
+    display:flex;
+    justify-content: space-evenly;
+    position:absolute;
+    bottom: 2em;
+    right:0;
+    left:0;
+    transition: .2s ease;
+    background: rgb(212, 197, 197);
+    color: cadetblue;
+    width:auto;
+    opacity:0;
+    padding: auto;
+    text-align: center;
+    
+}
+.mealDetail:hover .shortData{
+    opacity: 0.92;
+}
+
+.largeDetail{
+    color: cadetblue;
+    text-align: center;
+}
+
+.cart{
+    display:flex;
+    padding: 0 auto;
+}
+
+.cart div{
+    color: cadetblue;
+    display: block;
+    width:50%;
+    padding: 0 20px;
+
+}
+.cart img{
+    height:25vw;
+    width:100%;
+    object-fit: cover;
+}
+
+.price-wrap::after{
+    content: "";
+    width: 70%;
+    height: 1px;
+    background: cadetblue;
+}
+
+.total-price{
+    justify-content: space-evenly;
+    color: cadetblue;
+}
+.cart-wrap{
+    text-align: center;
+    display: block;
+    padding : 2em;
+}
+.cart-wrap a{
+   text-align: center;
+   text-decoration: none;
+   color: cadetblue;
+   padding: 2px auto;
+   font-size: large;
+}

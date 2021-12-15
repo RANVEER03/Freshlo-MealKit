@@ -1,0 +1,15 @@
+<section class="mealDetail">
+      <img class="mealDetail-pic" src="{{value.ImageURL}}">
+      <div class="shortData">
+            <div><h4>Cooking Time: <br> {{value.CookingTime}}</h4></div>
+            <div><h4>Calories: <br> {{value.Calories}}</h4></div>
+            <div><h4>Category: <br> {{value.Category}}</h4></div>
+      </div>
+</section>
+<section class="largeDetail">
+     <h1>{{value.Title}}</h1>
+     <h4>{{value.Description}}</h4>
+     <form method="post" action="{{_id}}" >
+     <input type="submit" value="Add to cart for {{value.Price}}">
+     </form>
+</section>

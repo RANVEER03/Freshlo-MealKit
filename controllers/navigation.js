@@ -93,7 +93,6 @@ router.post("/signup", function(req,res){
        passed=false;
      };
    };
-   
    if(passed){
     validation = {};
     sgmail.setApiKey(process.env.mailKey);

@@ -1,0 +1,33 @@
+{{#if msg}}
+ <h2 style="text-align: center; color:cadetblue; font-size:large; display:block ; padding-bottom: 10px">{{msg}}</h2>
+{{/if}}
+{{#if mealKit}}
+{{#each mealKit}}
+<section class="cart">
+    
+    <div>
+        <img src="{{url}}">
+    </div>
+    <div>
+        <h2>{{title}}</h2>
+        <h4>{{description}}</h4>
+        <h4>Price: {{price}}</h4>
+        <h4>Quantity: {{quantity}}</h4><br>
+    </div>
+    
+</section>
+{{/each}}
+
+<div class="total-price">
+    <hr>
+    <h3 style="width:93%; text-align:right;">Total:</h3>
+    <h4 style="width:93%; text-align:right; font-size:0.7cm;">${{total}}</h4>
+    <hr>
+</div>
+<div class="cart-wrap">
+     <form method="post" action="cart" >
+        <input type="submit" value="Place order">
+     </form>
+    
+</div>
+{{/if}}

@@ -167,7 +167,7 @@ router.post("/meal-kits", function(req,res){
 router.post("/meal-kits/:kitId", function(req,res){
   const id = req.params.kitId;
   let topMeal;
-  let category= [];
+  let category;
   let validation = {};
   let msg;
   let mealPic;

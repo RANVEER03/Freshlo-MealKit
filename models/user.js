@@ -1,5 +1,6 @@
 //Establishing bcrypt
 const bcrypt = require("bcryptjs");
+const req = require("express/lib/request");
 // Establishing mongoose
 const mongoose = require("mongoose");
 const schema = mongoose.Schema;
@@ -52,3 +53,4 @@ userSchema.pre("save", function(skip){
 
 const userModel = mongoose.model("allUsers", userSchema);
 module.exports = userModel;
+

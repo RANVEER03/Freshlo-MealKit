@@ -73,6 +73,7 @@ app.use(express.static("static"));
 const navigation = require("./controllers/navigation");
 const user = require("./controllers/user");
 const loadData = require("./controllers/load-data")
+const mealData = require("./controllers/meal-detail")
 // All Navigation
  app.use("/",navigation);
  app.use("/onthemenu",navigation);
@@ -86,6 +87,8 @@ app.use("/dashboard",user);
  app.use("/",user);
 // All data
 app.use("/load-data",loadData);
+// Meal details
+app.use("/meal-kits",mealData.router);
 // Port Listening
 var HTTP_PORT = process.env.PORT || 8080;
 
