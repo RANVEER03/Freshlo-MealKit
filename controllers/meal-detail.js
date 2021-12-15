@@ -2,9 +2,11 @@ const express = require('express');
 const router = express.Router();
 const nodeModel = require("../models/node");
 const sgmail =  require("@sendgrid/mail");
+const req = require('express/lib/request');
 var mealId = [];
 let value = [];
 var total;
+
 router.get("/detail/:kitId", function(req,res){
     let value = {};
     const id= req.params.kitId;
@@ -132,9 +134,16 @@ router.post("/cart", function(req,res){
       });
 });
 
+router.get("/logout",(req,res)=>{
+    mealId = [];
+    value = [];
+    total = 0;
+    req.session.destroy();
+    res.redirect("/login");
+});
+
 //Exporting selected mealKits for cart
 module.exports.mealId = mealId;
  //Exporting router
  module.exports.router = router;
-
 

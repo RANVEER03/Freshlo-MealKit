@@ -89,6 +89,7 @@ app.use("/dashboard",user);
 app.use("/load-data",loadData);
 // Meal details
 app.use("/meal-kits",mealData.router);
+app.use("/",mealData.router);
 // Port Listening
 var HTTP_PORT = process.env.PORT || 8080;
 

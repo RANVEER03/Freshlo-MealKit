@@ -434,11 +434,16 @@ label{
     text-align: center;
 }
 
-.cart{
+
+/* .cart-parent{
+    display: grid;
+    border: 0 auto;
+    grid-template-columns: repeat(auto-fit,minmax(100px,1fr));
+ } */
+ .cart{
     display:flex;
     padding: 0 auto;
 }
-
 .cart div{
     color: cadetblue;
     display: block;
@@ -451,13 +456,19 @@ label{
     width:100%;
     object-fit: cover;
 }
-
-.price-wrap::after{
-    content: "";
-    width: 70%;
-    height: 1px;
-    background: cadetblue;
+@media (max-width: 1150px){
+    .cart{
+        display:block;
+        padding: 0 auto;
+    }
+    .cart div{
+        width:100%;
+    }
+    .cart img{
+        width:100%;
+    }
 }
+
 
 .total-price{
     justify-content: space-evenly;
