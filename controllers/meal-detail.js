@@ -50,6 +50,7 @@ router.get("/cart", function(req,res){
     var msg;
     var toTotal;
     total = 0;
+    var totalSend;
     if(req.session.customeruser){    
     mealId.forEach(id => {
      nodeModel.mealModel.findOne({_id:id})
@@ -78,10 +79,11 @@ router.get("/cart", function(req,res){
         toTotal = toTotal.substring(1);
         toTotal = parseFloat(toTotal);
         total =  total + toTotal;
+        totalSend = parseFloat(total).toFixed(2);
         if(index==mealId.length){
             res.render("data/cart",{
                 mealKit: value,  
-                total,
+                totalSend,
                 msg
             });
         }
@@ -104,7 +106,7 @@ router.get("/cart", function(req,res){
 });
 
 router.post("/cart", function(req,res){
-     
+     var totalSend = parseFloat(total).toFixed(2);
      let kitDetails = [];
      for(i=0;i<value.length;i++){
          kitDetails.push(`<li>${value[i].title} X ${value[i].quantity}`)

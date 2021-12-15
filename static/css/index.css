@@ -315,7 +315,7 @@ background-color: black;
 }
 
 footer{
-    padding:1.5em;
+    padding: 1.5em;
     background-color: rgb(154, 252, 129);
     color:rgb(89, 89, 241);
     
@@ -355,7 +355,6 @@ th, td{
 }
 
 .footerDetails div a{
-    padding-left: 1.7em;
     text-decoration: none;
 }
 
