@@ -54,3 +54,23 @@ userSchema.pre("save", function(skip){
 const userModel = mongoose.model("allUsers", userSchema);
 module.exports = userModel;
 
+// var unencrypted = "WEB322";
+// var encrypted = null;
+// bcrypt.genSalt(8)
+//     .then(salt => {
+//         bcrypt.hash(unencrypted, salt)
+//         .then(hashedPass => {        
+//             encrypted = hashedPass;
+//             console.log(encrypted);
+//             skip();
+//         })
+//         .catch(err => {
+//             console.log(`Cannot hash because of ${err}`);    
+//         })
+//     })
+//     .catch(err => {
+//         console.log(`Cannot salt because of ${err}`);
+// });
+
+
+

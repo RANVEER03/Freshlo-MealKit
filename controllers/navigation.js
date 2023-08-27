@@ -114,6 +114,7 @@ router.post("/signup", function(req,res){
       password: password
     });
     
+    //Adding user
     userDB.save()
     .then((savedUser) => {
         // User was saved correctly.

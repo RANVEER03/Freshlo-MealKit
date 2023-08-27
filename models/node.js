@@ -135,6 +135,7 @@ module.exports.mealModel = mealModel;
 // ];
 
 var allKits = [];
+//Populating database
 mealModel.find().count({}, (error, count) => {
     if (error) {
         console.log("Couldn't find: " + error);
@@ -160,6 +161,7 @@ mealModel.find({})
     allKits = Kits.map(value=>value.toObject());
     module.exports.allKits = Kits.map(value=>value.toObject());
      console.log("Data rendered successfully")
+     // Returning all objects
      module.exports.getCategoryKits = function(){
         var categoryKits = [];
         for(i=0;i < allKits.length;i++){
@@ -175,6 +177,7 @@ mealModel.find({})
          }
        return categoryKits;
     };
+    //Returning Category objects
     
     module.exports.getTopMeals = function(){
         var TopMeal=[];
